@@ -7,3 +7,9 @@ class ExampleTest(TestCase):
 
     def test_something(self):
         self.assertEquals(1, 1)
+
+
+class TaskExecutionTest(TestCase):
+
+    def test_task_execution(self):
+        self.assertEquals(1, 1)
