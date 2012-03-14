@@ -5,33 +5,81 @@ Running cellery tasks from admin interface with lizard-task
 What lizard-task does
 -------------------------
 
+Lizard-task extends django-celery with next functionalities:
+
 - Lizard-task provides the possability to run periodic tasks from
   admin interface
-- Lizard-task provides the possability to view loggings of executed
-  tasks
-- Lizard-task provides the possability to filter task and logging 
-  using lizard-security
 - lizard-task provides the logging handler to save logging messages
   into database
+- Lizard-task provides the possability to view and filter task and
+  loggings using lizard-security
 
 
 Usage in our project
 --------------------
+To use lizard-task, we need to
+
+- Add celery, django-celery and lizard-security to INSTALLED_APPS
+- Create celery database tables::
+
+  $ bin/django syncdb
+
+- Create django-celery, lizard-security and lizard-task database tables::
+
+  $ bin/django migrate
+
+- Configure celery to use message broker, by additing 
+  the following to your settings.py::
+
+  BROKER_HOST = "localhost"
+  BROKER_PORT = 5672
+  BROKER_USER = "myuser"
+  BROKER_PASSWORD = "mypassword"
+  BROKER_VHOST = "myvhost"
+
+- Add modules with tasks to your settings.py::
+
+  CELERY_IMPORTS = ('vss.tasks',
+                    'lizard_wbconfiguration.tasks',
+                    'lizard_fewsnorm.tasks',
+                    'lizard_area.tasks',
+                    'lizard_esf.tasks',) 
+
+- Created tasks in djcelery admin interface
+
+- Create tasks in lizard-task admin interface
+
+- Start celery worker::
+
+  $ bin/django celeryd
+ 
+  However, in production you probably want to run the worker in the
+  background as a daemon. To do this you can use supervisor or other
+  tools provided by your platform.
 
 
-Usage loggin handler
----------------------
-To use logging handler of lizard-task set 
-- Create handler for each task
+Example usage lizard-task logging handler
+-----------------------------------------
 
-  from lizard_task.handler import get_handler
-  handler = get_handler('<<task_name>>', '<<username>>')
-
-- Add handler to your logging logger
   
-  logger.addHandler(handler)
+  import logging
+  from celery.task import task
+  from lizard_task.handler import get_handler
 
-- Depends on logging 
+  @task()
+  def import_dbf(levelno=20):
+      
+      handler = get_handler('<<task_name>>', '<<username>>')
+      logger = logging.getLogger(__name__)
+      logger.addHandler(handler)
+      logger.setLevel()
+      
+      <<your code>>
+      logger.info("Logging message")
+      <<your code>>
+
+      logger.removeHandler(handler)
+      
 
 
 

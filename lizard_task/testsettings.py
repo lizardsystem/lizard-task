@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'staticfiles',
     'compressor',
     'south',
+    'celery',
     'django_nose',
     'djcelery',
     'django_extensions',
