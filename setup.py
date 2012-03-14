@@ -12,8 +12,10 @@ long_description = '\n\n'.join([
 install_requires = [
     'Django',
     'django-extensions',
+    'djcelery',
     'django-nose',
     'lizard-ui >= 3.0',
+    'lizard-security',
     'pkginfo',
     ],
 

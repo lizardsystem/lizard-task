@@ -33,4 +33,4 @@ class DBLoggingHandler(logging.Handler):
                                        data_set=self.task_execution.data_set)
             task_logging.save()
         except Exception as ex:
-            logger.error(',HIER'.join(map(str, ex.args)))
+            logger.error(','.join(map(str, ex.args)))

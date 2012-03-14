@@ -20,7 +20,7 @@ class TaskExecutionAdmin(admin.ModelAdmin):
                     'amount_updated', 'amount_created')
 
     def log_messages(self, obj):
-        logs = TaskLogging.objects.filter(task__id=obj.id)
+        logs = TaskLogging.objects.filter(task__id=obj.id).order_by('id')
         msg = ""
         for log in logs:
             msg = "%s | %s" % (msg, log.message)
@@ -35,7 +35,6 @@ class PeriodicTaskExtAdmin(admin.ModelAdmin):
     list_filter = ('data_set',)
 
     actions = ['empty_action', 'run_tasks']
-    #admin.site.disable_action('delete_selected')
 
     def args(self, obj):
         return obj.task.args

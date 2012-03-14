@@ -20,17 +20,6 @@ LOGGING_LEVELS = (
 )
 
 
-# def get_registred_tasks():
-#     from djcelery import loaders
-#     loaders.autodiscover()
-#     from celery import registry
-#     tasks = list(sorted(registry.tasks.regular().keys()))
-#     choices = (("", ""), ) + tuple(zip(tasks, tasks))
-#     return choices
-
-#REGISTRED_TASKS = get_registred_tasks()
-
-
 class PeriodicTaskExt(models.Model):
     task = models.OneToOneField(PeriodicTask,
                                 related_name="periodictaskext_task")
