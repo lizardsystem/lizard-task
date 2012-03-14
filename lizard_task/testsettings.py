@@ -41,10 +41,12 @@ SITE_ID = 1
 INSTALLED_APPS = [
     'lizard_task',
     'lizard_ui',
+    'lizard_security',
     'staticfiles',
     'compressor',
     'south',
     'django_nose',
+    'djcelery',
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
