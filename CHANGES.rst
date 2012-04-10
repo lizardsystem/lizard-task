@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Import simplejson from django.utils.
 
 
 0.1 (2012-03-14)

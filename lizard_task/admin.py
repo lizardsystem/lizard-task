@@ -7,7 +7,7 @@ from lizard_task.models import PeriodicTaskExt
 from lizard_task.models import TaskExecution
 from lizard_task.models import TaskLogging
 
-import simplejson as json
+from django.utils import simplejson as json
 
 
 class TaskLoggingAdmin(admin.ModelAdmin):
