@@ -7,11 +7,11 @@ What lizard-task does
 
 Lizard-task extends django-celery with next functionalities:
 
-- Lizard-task provides the possability to run periodic tasks from
+- Lizard-task provides the possibility to run periodic tasks from
   admin interface
 - lizard-task provides the logging handler to save logging messages
   into database
-- Lizard-task provides the possability to view and filter task and
+- Lizard-task provides the possibility to view and filter task and
   loggings using lizard-security
 
 
@@ -28,7 +28,7 @@ To use lizard-task, we need to
 
   $ bin/django migrate
 
-- Configure celery to use message broker, by additing 
+- Configure celery to use message broker, by additing
   the following to your settings.py::
 
   BROKER_HOST = "localhost"
@@ -43,7 +43,7 @@ To use lizard-task, we need to
                     'lizard_wbconfiguration.tasks',
                     'lizard_fewsnorm.tasks',
                     'lizard_area.tasks',
-                    'lizard_esf.tasks',) 
+                    'lizard_esf.tasks',)
 
 - Created tasks in djcelery admin interface
 
@@ -52,7 +52,7 @@ To use lizard-task, we need to
 - Start celery worker::
 
   $ bin/django celeryd
- 
+
   However, in production you probably want to run the worker in the
   background as a daemon. To do this you can use supervisor or other
   tools provided by your platform.
@@ -61,25 +61,25 @@ To use lizard-task, we need to
 Example usage lizard-task logging handler
 -----------------------------------------
 
-  
+
   import logging
   from celery.task import task
   from lizard_task.handler import get_handler
 
   @task()
   def import_dbf(levelno=20):
-      
+
       handler = get_handler('<<task_name>>', '<<username>>')
       logger = logging.getLogger(__name__)
       logger.addHandler(handler)
       logger.setLevel()
-      
+
       <<your code>>
       logger.info("Logging message")
       <<your code>>
 
       logger.removeHandler(handler)
-      
+
 
 
 
