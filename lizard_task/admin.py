@@ -48,12 +48,17 @@ class PeriodicTaskExtAdmin(admin.ModelAdmin):
     # id_no_link.short_description = "id"
 
     def run_tasks(self, request, queryset):
+        # queryset of PeriodicTaskExt objects.
+        tasks = []
         for item in queryset:
             task_name = str(item.task.task)
             args = json.loads(item.task.args)
             kwargs = json.loads(item.task.kwargs)
-            send_task(task_name, args=args, kwargs=kwargs)
-        self.message_user(request, "Taak is opgestart.")
+            task = send_task(task_name, args=args, kwargs=kwargs)
+            tasks.append(task)
+        self.message_user(
+            request,
+            "Taak/taken opgestart: %s" % ', '.join([str(t) for t in tasks]))
     run_tasks.short_description = "Uitvoeren geselecteerde task"
 
 
