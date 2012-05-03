@@ -16,7 +16,7 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'started_by', 'log_messages',
+    list_display = ('task', 'task_uuid', 'started_by', 'log_messages',
                     'dt_start', 'dt_finish', 'task_uuid')
 
     def log_messages(self, obj):
