@@ -31,7 +31,7 @@ class PeriodicTaskExtAdmin(admin.ModelAdmin):
     loaders.autodiscover()
 
     list_display = (
-        'id_no_link', 'task', 'args', 'kwargs', 'data_set')
+        'id', 'task', 'args', 'kwargs', 'data_set')
     list_filter = ('data_set',)
 
     actions = ['empty_action', 'run_tasks']
@@ -42,19 +42,24 @@ class PeriodicTaskExtAdmin(admin.ModelAdmin):
     def kwargs(self, obj):
         return obj.task.kwargs
 
-    def id_no_link(self, obj):
-        return u'</a>%s<a>' % obj.id
-    id_no_link.allow_tags = True
-    id_no_link.short_description = "id"
+    # def id_no_link(self, obj):
+    #     return u'</a>%s<a>' % obj.id
+    # id_no_link.allow_tags = True
+    # id_no_link.short_description = "id"
 
     def run_tasks(self, request, queryset):
-        for item in queryset: 
+        # queryset of PeriodicTaskExt objects.
+        tasks = []
+        for item in queryset:
             task_name = str(item.task.task)
             args = json.loads(item.task.args)
             kwargs = json.loads(item.task.kwargs)
             kwargs["username"] = request.user.username
-            send_task(task_name, args=args, kwargs=kwargs)
-        self.message_user(request, "Taak is opgestart.")
+            task = send_task(task_name, args=args, kwargs=kwargs)
+            tasks.append(task)
+        self.message_user(
+            request,
+            "Taak/taken opgestart: %s" % ', '.join([str(t) for t in tasks]))
     run_tasks.short_description = "Uitvoeren geselecteerde task"
 
 

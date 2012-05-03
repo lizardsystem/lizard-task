@@ -33,6 +33,10 @@ class PeriodicTaskExt(models.Model):
 
 
 class TaskExecution(models.Model):
+    """
+    Jack: seems to me that this is the same as the list of Celery
+    tasks.
+    """
     task = models.ForeignKey(PeriodicTaskExt,
                              null=True,
                              related_name="taskexecution_task")
@@ -55,6 +59,9 @@ class TaskExecution(models.Model):
 
 
 class TaskLogging(models.Model):
+    """
+    Gets filled by the DBLoggingHandler
+    """
     task = models.ForeignKey(TaskExecution,
                              related_name="tasklogging_task")
     time = models.DateTimeField(blank=True, null=True)
