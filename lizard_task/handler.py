@@ -25,14 +25,18 @@ def logging_level(level):
     return levelno
 
 
-def create_task_execution(task_ext, username):
+def create_task_execution(task_ext, username, task_uuid):
     """Create task execution object.
 
     Arguments:
+    task_ext -- object of PeriodicTaskExt class
+    username -- username as string
+    task_uuid -- uuid of task execution
     """
     try:
         task_execution = TaskExecution(
             task=task_ext,
+            task_uuid=task_uuid,
             started_by=username,
             dt_start=datetime.today(),
             data_set=task_ext.data_set)
@@ -42,16 +46,20 @@ def create_task_execution(task_ext, username):
         logger.error(','.join(map(str, ex.args)))
 
 
-def get_handler(taskname, username):
+def get_handler(task_uuid, username=None, taskname=None):
     """Create logging handler to log messages into database.
 
     Arguments:
-    taskname -- taskname of defined periodic task in admin interface
+    task_uuid -- uuid of task execution
     username -- username as string
-    level -- logging level as string like 'debug', 'INFO', ...
+    taskname -- name of periodic task
     """
-    task_ext = PeriodicTaskExt.objects.get(task__name=taskname)
-    task_execution = create_task_execution(task_ext, username)
+    task_ext_list = PeriodicTaskExt.objects.filter(task__name=taskname)
+    if task_ext_list.exists() == False:
+        task_ext = None
+    else:
+        task_ext = task_ext_list[0]
+    task_execution = create_task_execution(task_ext, username, task_uuid)
     logging.handlers.DBLoggingHandler = DBLoggingHandler
     handler = logging.handlers.DBLoggingHandler(
         task_execution, username)

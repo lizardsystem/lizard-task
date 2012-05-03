@@ -34,24 +34,13 @@ class PeriodicTaskExt(models.Model):
 
 class TaskExecution(models.Model):
     task = models.ForeignKey(PeriodicTaskExt,
+                             null=True,
                              related_name="taskexecution_task")
+    task_uuid = models.CharField(max_length=255, unique=True)
     started_by = models.CharField(max_length=128, null=True, blank=True)
     dt_start = models.DateTimeField()
     dt_finish = models.DateTimeField(null=True,
                                      blank=True)
-    amount_updated = models.IntegerField(null=True,
-                                         blank=True)
-    amount_created = models.IntegerField(null=True,
-                                         blank=True)
-    amount_synchronized = models.IntegerField(null=True,
-                                             blank=True)
-    amount_deactivated = models.IntegerField(null=True,
-                                             blank=True)
-    amount_activated = models.IntegerField(null=True,
-                                           blank=True)
-    host = models.CharField(max_length=200, null=True, blank=True)
-    url = models.CharField(max_length=200, null=True, blank=True)
-    configuration = models.TextField(blank=True, null=True)
     supports_object_permissions = True
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True,

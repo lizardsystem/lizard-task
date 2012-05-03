@@ -1,6 +1,5 @@
 import logging
 from lizard_task.models import TaskLogging
-from lizard_task.models import TaskExecution
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,6 @@ class DBLoggingHandler(logging.Handler):
     def emit(self, record):
         """Override the function of logging to save
         logging message into database."""
-        print "set logging for %s." % self.task_execution
         try:
             task_logging = TaskLogging(task=self.task_execution,
                                        time=datetime.today(),
@@ -33,4 +31,5 @@ class DBLoggingHandler(logging.Handler):
                                        data_set=self.task_execution.data_set)
             task_logging.save()
         except Exception as ex:
-            logger.error(','.join(map(str, ex.args)))
+            logger.error("Error on save logging: %s" % (
+                    ",".join(map(str, ex.args))))

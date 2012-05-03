@@ -16,8 +16,8 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'started_by', 'log_messages', 'dt_start', 'dt_finish',
-                    'amount_updated', 'amount_created')
+    list_display = ('task', 'started_by', 'log_messages',
+                    'dt_start', 'dt_finish', 'task_uuid')
 
     def log_messages(self, obj):
         logs = TaskLogging.objects.filter(task__id=obj.id).order_by('id')
@@ -48,10 +48,11 @@ class PeriodicTaskExtAdmin(admin.ModelAdmin):
     id_no_link.short_description = "id"
 
     def run_tasks(self, request, queryset):
-        for item in queryset:
+        for item in queryset: 
             task_name = str(item.task.task)
             args = json.loads(item.task.args)
             kwargs = json.loads(item.task.kwargs)
+            kwargs["username"] = request.user.username
             send_task(task_name, args=args, kwargs=kwargs)
         self.message_user(request, "Taak is opgestart.")
     run_tasks.short_description = "Uitvoeren geselecteerde task"

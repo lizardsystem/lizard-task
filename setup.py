@@ -17,6 +17,7 @@ install_requires = [
     'lizard-ui >= 3.0',
     'lizard-security',
     'pkginfo',
+    'djangorestframework',
     ],
 
 tests_require = [

@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Serverprocessen overzicht{% endblock %}
+{% block content %}
+{% if view.msg %}
+    <h4>{{ view.msg }}</h4>
+{% else %}
+    <h4>Klik op 'Start' om een taak op te staren.</h4>
+{% endif %}
+<table border=1>
+  <th></th>
+  <th>Taaknaam</th>
+  <th>Status</th>
+  {% for task in view.tasks %}
+     <tr>
+       <td>
+	 
+	 <form action="" method="POST">{% csrf_token %}
+	   <input type="hidden" name="task_name" value="{{ task.task.name }}" />
+           <input type="submit" name="action"  value="start" />
+         </form>
+       </td>
+        <td>{{ task.task.name }}</td>
+        <td>{{ task.status }}</td>
+     </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">Serverprocessen</h1>
+{% endblock %}

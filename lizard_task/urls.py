@@ -6,11 +6,16 @@ from django.contrib import admin
 
 from lizard_ui.urls import debugmode_urlpatterns
 
+from lizard_task.views import TasksView
+
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
     (r'^admin/', include(admin.site.urls)),
+    url(r'^$',
+        TasksView.as_view(),
+        name='lizard_task_home'),
     # url(r'^something/',
     #     direct.import.views.some_method,
     #     name="name_it"),
