@@ -5,6 +5,8 @@ Changelog of lizard-task
 0.2 (unreleased)
 ----------------
 
+- Periodic Tasks Ext is clickable again in admin.
+
 - Import simplejson from django.utils.
 
 
