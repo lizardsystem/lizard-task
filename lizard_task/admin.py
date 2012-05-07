@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 
 from celery.execute import send_task
 from djcelery import loaders
+from djcelery.models import TaskState
 
 from lizard_task.models import PeriodicTaskExt
 from lizard_task.models import TaskExecution
@@ -16,8 +17,13 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'started_by', 'log_messages',
+    list_display = ('task', 'status', 'started_by', 'log_messages',
                     'dt_start', 'dt_finish', 'task_uuid')
+
+    def status(self, obj):
+        states = TaskState.objects.filter(task_id=obj.task_uuid)
+        if states.exists():
+            return states[0].state
 
     def log_messages(self, obj):
         logs = TaskLogging.objects.filter(task__id=obj.id).order_by('id')

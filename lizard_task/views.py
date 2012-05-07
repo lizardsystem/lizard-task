@@ -18,9 +18,7 @@ class TasksView(AppView):
     msg = ""
 
     def tasks(self):
-        print len(PeriodicTaskExt.objects.all())
-        print self.request.user.username
-        return PeriodicTaskExt.objects.filter(data_set__isnull=False)
+        return PeriodicTaskExt.objects.filter(data_set__isnull=False)        
              
     def post(self, request, *args, **kwargs):
         task_name = request.POST.get('task_name', None)

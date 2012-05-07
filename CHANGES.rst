@@ -17,6 +17,8 @@ Changelog of lizard-task
 
 - Added 'task_uuid' parameter to function get_handler in handler.py
 
+- Added function to PeriodicTaskExt model to retrieve the latest state.
+
 
 0.1 (2012-03-14)
 ----------------

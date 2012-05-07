@@ -9,6 +9,7 @@ from lizard_security.models import DataSet
 from lizard_security.manager import FilteredManager
 
 from djcelery.models import PeriodicTask
+from djcelery.models import TaskState
 
 
 LOGGING_LEVELS = (
@@ -27,6 +28,19 @@ class PeriodicTaskExt(models.Model):
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True,
                                  related_name="periodictaskext_data_set")
+
+    def latest_state(self):
+        state = None
+        task_executions = TaskExecution.objects.filter(
+                task=self).order_by('-dt_start')
+        if task_executions.exists() == False:
+            return state
+        task_execution = task_executions[0]
+        task_states = TaskState.objects.filter(task_id=task_execution.task_uuid)
+        if task_states.exists() == False:
+            return state
+        return task_states[0]
+
 
     def __unicode__(self):
         return self.task.name

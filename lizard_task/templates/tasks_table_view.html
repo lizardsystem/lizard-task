@@ -10,17 +10,27 @@
   <th></th>
   <th>Taaknaam</th>
   <th>Status</th>
+  <th>UUID</th>
+  <th>DT_Start</th>
   {% for task in view.tasks %}
      <tr>
        <td>
-	 
 	 <form action="" method="POST">{% csrf_token %}
 	   <input type="hidden" name="task_name" value="{{ task.task.name }}" />
            <input type="submit" name="action"  value="start" />
          </form>
        </td>
         <td>{{ task.task.name }}</td>
-        <td>{{ task.status }}</td>
+	{% if task.latest_state %}
+        <td>{{ task.latest_state.state }}</td>
+	<td>{{ task.latest_state.task_id }}</td>
+	<td>{{ task.latest_state.tstamp }}</td>
+	{% else %}
+	<td></td>
+	<td></td>
+	<td></td>
+	{% endif %}
+	
      </tr>
   {% endfor %}
 </table>
