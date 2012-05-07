@@ -2,8 +2,6 @@
 API views not coupled to models.
 """
 from django.views.decorators.csrf import csrf_exempt
-from celery.execute import send_task
-from django.utils import simplejson as json
 from django.http import HttpResponseRedirect
 
 from lizard_task.models import PeriodicTaskExt
@@ -21,17 +19,17 @@ class TasksView(AppView):
     def tasks(self):
         return PeriodicTaskExt.objects.filter(data_set__isnull=False)
 
+    def get(self, request, *args, **kwargs):
+        self.msg = request.GET.get('msg', '')
+        return super(TasksView, self).get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
-        task_name = request.POST.get('task_name', None)
-        lizard_tasks = PeriodicTaskExt.objects.filter(
-            task__name=task_name)
-        if lizard_tasks.exists():
-            task = lizard_tasks[0].task
-            args_params = json.loads(task.args)
-            kwargs_params = json.loads(task.kwargs)
-            kwargs_params["username"] = request.user.username
-            result = send_task(task.task, args=args_params, kwargs=kwargs_params)
-            self.msg = "Taak '%s' is opgestart." % task_name
-        else:
-            self.msg = "Taak '%s' is niet opgestart." % task_name
-        return self.get(request, *args, **kwargs)
+        """
+        Start PeriodicTaskExt with pk task_pk.
+        """
+        pk = request.POST['task_pk']
+        # Lizard security is at work here.
+        periodic_task_ext = PeriodicTaskExt.objects.get(pk=pk)
+        periodic_task_ext.send_task(username=request.user.username)
+        msg = "Taak '%s' is opgestart." % periodic_task_ext.task.name
+        return HttpResponseRedirect('./?msg=%s' % msg)

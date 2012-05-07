@@ -1,8 +1,8 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 # from django.db import models
 
-# Create your models here.
-
+from celery.execute import send_task
+from django.utils import simplejson as json
 from django.db import models
 
 from lizard_security.models import DataSet
@@ -43,6 +43,13 @@ class PeriodicTaskExt(models.Model):
         except IndexError:
             return None
 
+    def send_task(self, username=None):
+        task = self.task
+        args_params = json.loads(task.args)
+        kwargs_params = json.loads(task.kwargs)
+        kwargs_params["username"] = username or '-'
+        print task.task, args_params, kwargs_params
+        result = send_task(task.task, args=args_params, kwargs=kwargs_params)
 
     def __unicode__(self):
         return self.task.name

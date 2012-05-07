@@ -47,7 +47,7 @@ def create_task_execution(task_ext, username, task_uuid):
         logger.error(','.join(map(str, ex.args)))
 
 
-def get_handler(username=None, taskname=None):
+def get_handler(taskname=None, username=None):
     """Create logging handler to log messages into database.
 
     Arguments:
@@ -55,12 +55,14 @@ def get_handler(username=None, taskname=None):
     username -- username as string
     taskname -- name of periodic task
     """
-    task_ext_list = PeriodicTaskExt.objects.filter(task__name=taskname)
-    if task_ext_list.exists() == False:
-        task_ext = None
-    else:
-        task_ext = task_ext_list[0]
-    task_uuid = Task.request.id
+    task_ext = None
+    if taskname:
+        try:
+            task_ext = PeriodicTaskExt.objects.filter(task__name=taskname)[0]
+        except:
+            logger.exception('Something went wrong fetching task_ext')
+
+    task_uuid = Task.request.id  # Current task uuid
     task_execution = create_task_execution(task_ext, username, task_uuid)
     logging.handlers.DBLoggingHandler = DBLoggingHandler
     handler = logging.handlers.DBLoggingHandler(
