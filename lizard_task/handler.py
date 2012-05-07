@@ -1,4 +1,5 @@
 from datetime import datetime
+from celery.task import Task
 
 from lizard_task.models import TaskExecution
 from lizard_task.models import PeriodicTaskExt
@@ -39,14 +40,14 @@ def create_task_execution(task_ext, username, task_uuid):
             task_uuid=task_uuid,
             started_by=username,
             dt_start=datetime.today(),
-            data_set=task_ext.data_set)
+            data_set=task_ext.data_set if task_ext else None)
         task_execution.save()
         return task_execution
     except Exception as ex:
         logger.error(','.join(map(str, ex.args)))
 
 
-def get_handler(task_uuid, username=None, taskname=None):
+def get_handler(username=None, taskname=None):
     """Create logging handler to log messages into database.
 
     Arguments:
@@ -59,6 +60,7 @@ def get_handler(task_uuid, username=None, taskname=None):
         task_ext = None
     else:
         task_ext = task_ext_list[0]
+    task_uuid = Task.request.id
     task_execution = create_task_execution(task_ext, username, task_uuid)
     logging.handlers.DBLoggingHandler = DBLoggingHandler
     handler = logging.handlers.DBLoggingHandler(

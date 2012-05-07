@@ -62,7 +62,6 @@ class TaskExecution(models.Model):
     supports_object_permissions = True
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True,
-                                 verbose_name="tttt",
                                  related_name="taskexecution_data_set")
 
     class Meta:
