@@ -1,0 +1,63 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Serverprocessen{% endblock %}
+
+{% block branding %}
+  <h1 id="site-name">Serverprocessen</h1>
+{% endblock %}
+
+{% block content %}
+
+  {% if view.msg %}
+    <h4>{{ view.msg }}</h4>
+  {% else %}
+    <h4>Klik op 'Start' om een taak op te staren.</h4>
+  {% endif %}
+
+  <div class="module">
+    <table width="100%">
+      <thead>
+        <th></th>
+        <th>Taaknaam</th>
+        <th>Status</th>
+        <th>Start</th>
+        <th>Runtime (s)</th>
+        <th>Resultaat</th>
+      </thead>
+      <tbody>
+      {% for task in view.tasks %}
+         <tr class="{% cycle 'row1' 'row2' %}">
+           <td>
+         <form action="" method="POST">{% csrf_token %}
+           <input type="hidden" name="task_name" value="{{ task.task.name }}" />
+               <input type="submit" name="action"  value="start" />
+             </form>
+           </td>
+            <td>{{ task.task.name }}</td>
+        {% if task.latest_state %}
+            <td>
+              {% ifequal task.latest_state.state 'SUCCESS' %}
+                <span style="color: green;">
+              {% else %}
+                {% ifequal task.latest_state.state 'FAILURE' %}
+                  <span style="color: red;">
+                {% else %}
+                  <span>
+                {% endifequal %}
+              {% endifequal %}
+            <strong>{{ task.latest_state.state }}</strong>
+            </span>
+            </td>
+            <td>{{ task.latest_state.tstamp }}</td>
+            <td>{{ task.latest_state.runtime }}</td>
+            <td>{{ task.latest_state.result }}</td>
+        {% else %}
+            <td colspan="4">-</td>
+        {% endif %}
+
+         </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

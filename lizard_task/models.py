@@ -30,16 +30,18 @@ class PeriodicTaskExt(models.Model):
                                  related_name="periodictaskext_data_set")
 
     def latest_state(self):
-        state = None
-        task_executions = TaskExecution.objects.filter(
-                task=self).order_by('-dt_start')
-        if task_executions.exists() == False:
-            return state
-        task_execution = task_executions[0]
-        task_states = TaskState.objects.filter(task_id=task_execution.task_uuid)
-        if task_states.exists() == False:
-            return state
-        return task_states[0]
+        """
+        Fetch current associated task state.
+
+        In order for this function to work, the task need a taskname
+        provided.
+        """
+        try:
+            task_uuid = TaskExecution.objects.filter(
+                task=self).order_by('-dt_start')[0].task_uuid
+            return TaskState.objects.get(task_id=task_uuid)
+        except IndexError:
+            return None
 
 
     def __unicode__(self):
@@ -68,7 +70,7 @@ class TaskExecution(models.Model):
         get_latest_by = "dt_start"
 
     def __unicode__(self):
-        return "%s %s" % (self.task.task.name, self.id)
+        return "%s %s" % (self.task or '-', self.id)
 
 
 class TaskLogging(models.Model):
