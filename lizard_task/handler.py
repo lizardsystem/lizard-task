@@ -2,7 +2,7 @@ from datetime import datetime
 from celery.task import Task
 
 from lizard_task.models import TaskExecution
-from lizard_task.models import PeriodicTaskExt
+from lizard_task.models import SecuredPeriodicTask
 from lizard_task.models import LOGGING_LEVELS
 from lizard_task.db_logging_handler import DBLoggingHandler
 
@@ -26,21 +26,21 @@ def logging_level(level):
     return levelno
 
 
-def create_task_execution(task_ext, username, task_uuid):
+def create_task_execution(task, username, task_uuid):
     """Create task execution object.
 
     Arguments:
-    task_ext -- object of PeriodicTaskExt class
+    task -- object of SecuredPeriodicTask class
     username -- username as string
     task_uuid -- uuid of task execution
     """
     try:
         task_execution = TaskExecution(
-            task=task_ext,
+            task=task,
             task_uuid=task_uuid,
             started_by=username,
             dt_start=datetime.today(),
-            data_set=task_ext.data_set if task_ext else None)
+            data_set=task.data_set if task else None)
         task_execution.save()
         return task_execution
     except Exception as ex:
@@ -55,15 +55,15 @@ def get_handler(taskname=None, username=None):
     username -- username as string
     taskname -- name of periodic task
     """
-    task_ext = None
+    task = None
     if taskname:
         try:
-            task_ext = PeriodicTaskExt.objects.filter(task__name=taskname)[0]
+            task = SecuredPeriodicTask.objects.filter(name=taskname)[0]
         except:
-            logger.exception('Something went wrong fetching task_ext')
+            logger.exception('Something went wrong fetching task')
 
     task_uuid = Task.request.id  # Current task uuid
-    task_execution = create_task_execution(task_ext, username, task_uuid)
+    task_execution = create_task_execution(task, username, task_uuid)
     logging.handlers.DBLoggingHandler = DBLoggingHandler
     handler = logging.handlers.DBLoggingHandler(
         task_execution, username)

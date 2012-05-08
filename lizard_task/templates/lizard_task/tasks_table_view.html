@@ -1,5 +1,9 @@
 {% extends "admin/base_site.html" %}
 
+{% block extrahead %}
+<meta http-equiv="refresh" content="10" >
+{% endblock %}
+
 {% block title %}Serverprocessen{% endblock %}
 
 {% block branding %}
@@ -53,7 +57,7 @@
             </span>
           </td>
           <td>{% firstof task.latest_state.tstamp '-' %}</td>
-          <td>{% firstof task.latest_state.runtime '-' %}</td>
+          <td>{% firstof task.latest_state.runtime|floatformat '-' %}</td>
           <td>{% firstof task.latest_state.result '-' %}</td>
         {% else %}
           <td colspan="4">-</td>

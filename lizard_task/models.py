@@ -21,13 +21,45 @@ LOGGING_LEVELS = (
 )
 
 
-class PeriodicTaskExt(models.Model):
-    task = models.OneToOneField(PeriodicTask,
-                                related_name="periodictaskext_task")
-    supports_object_permissions = True
+# class PeriodicTaskExt(models.Model):
+#     task = models.OneToOneField(PeriodicTask,
+#                                 related_name="periodictaskext_task")
+#     supports_object_permissions = True
+#     objects = FilteredManager()
+#     data_set = models.ForeignKey(DataSet, null=True, blank=True,
+#                                  related_name="periodictaskext_data_set")
+
+#     def latest_state(self):
+#         """
+#         Fetch current associated task state.
+
+#         In order for this function to work, the task need a taskname
+#         provided.
+#         """
+#         try:
+#             task_uuid = TaskExecution.objects.filter(
+#                 task=self).order_by('-dt_start')[0].task_uuid
+#             return TaskState.objects.get(task_id=task_uuid)
+#         except IndexError:
+#             return None
+
+#     def send_task(self, username=None):
+#         task = self.task
+#         args_params = json.loads(task.args)
+#         kwargs_params = json.loads(task.kwargs)
+#         kwargs_params["username"] = username or '-'
+#         result = send_task(task.task, args=args_params, kwargs=kwargs_params)
+
+#     def __unicode__(self):
+#         return self.task.name
+
+
+class SecuredPeriodicTask(PeriodicTask):
+    """
+    Adds data_set to PeriodicTask to provide security.
+    """
     objects = FilteredManager()
-    data_set = models.ForeignKey(DataSet, null=True, blank=True,
-                                 related_name="periodictaskext_data_set")
+    data_set = models.ForeignKey(DataSet, null=True, blank=True)
 
     def latest_state(self):
         """
@@ -35,6 +67,8 @@ class PeriodicTaskExt(models.Model):
 
         In order for this function to work, the task need a taskname
         provided.
+
+        TODO: fix
         """
         try:
             task_uuid = TaskExecution.objects.filter(
@@ -44,15 +78,10 @@ class PeriodicTaskExt(models.Model):
             return None
 
     def send_task(self, username=None):
-        task = self.task
-        args_params = json.loads(task.args)
-        kwargs_params = json.loads(task.kwargs)
+        args_params = json.loads(self.args)
+        kwargs_params = json.loads(self.kwargs)
         kwargs_params["username"] = username or '-'
-        print task.task, args_params, kwargs_params
-        result = send_task(task.task, args=args_params, kwargs=kwargs_params)
-
-    def __unicode__(self):
-        return self.task.name
+        result = send_task(self.task, args=args_params, kwargs=kwargs_params)
 
 
 class TaskExecution(models.Model):
@@ -60,15 +89,14 @@ class TaskExecution(models.Model):
     Jack: seems to me that this is the same as the list of Celery
     tasks.
     """
-    task = models.ForeignKey(PeriodicTaskExt,
-                             null=True,
-                             related_name="taskexecution_task")
+    task = models.ForeignKey(SecuredPeriodicTask,
+                             null=True)
     task_uuid = models.CharField(max_length=255, unique=True)
     started_by = models.CharField(max_length=128, null=True, blank=True)
     dt_start = models.DateTimeField()
     dt_finish = models.DateTimeField(null=True,
                                      blank=True)
-    supports_object_permissions = True
+    #supports_object_permissions = True
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True,
                                  related_name="taskexecution_data_set")

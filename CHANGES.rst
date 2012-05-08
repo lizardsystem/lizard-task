@@ -5,7 +5,14 @@ Changelog of lizard-task
 0.2 (unreleased)
 ----------------
 
-- Periodic Tasks Ext is clickable again in admin.
+Things to do after upgrading:
+
+- Clear the TaskExecution table
+
+
+Changed:
+
+- Exchanged Periodic Task Ext for SecuredPeriodicTask.
 
 - Import simplejson from django.utils.
 
@@ -17,7 +24,7 @@ Changelog of lizard-task
 
 - Added 'task_uuid' parameter to function get_handler in handler.py
 
-- Added function to PeriodicTaskExt model to retrieve the latest state.
+- Added SecuredPeriodicTask model with latest_state function.
 
 
 0.1 (2012-03-14)

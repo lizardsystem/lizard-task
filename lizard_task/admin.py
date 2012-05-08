@@ -1,12 +1,21 @@
-from django.contrib.gis import admin
+from django.contrib import admin
 
 from celery.execute import send_task
 from djcelery import loaders
 from djcelery.models import TaskState
+from djcelery.models import PeriodicTask
+from djcelery.admin import PeriodicTaskAdmin
+from djcelery.admin import LaxChoiceField
+from celery import registry
+from django import forms
+from django.utils.translation import ugettext_lazy as _
 
-from lizard_task.models import PeriodicTaskExt
+#from lizard_task.models import PeriodicTaskExt
+from lizard_task.models import SecuredPeriodicTask
 from lizard_task.models import TaskExecution
 from lizard_task.models import TaskLogging
+
+from lizard_security.models import DataSet
 
 from django.utils import simplejson as json
 
@@ -34,42 +43,111 @@ class TaskExecutionAdmin(admin.ModelAdmin):
         return msg
 
 
-class PeriodicTaskExtAdmin(admin.ModelAdmin):
+# class PeriodicTaskExtAdmin(admin.ModelAdmin):
+#     loaders.autodiscover()
+
+#     list_display = (
+#         'id', 'task', 'args', 'kwargs', 'data_set')
+#     list_filter = ('data_set',)
+
+#     actions = ['empty_action', 'run_tasks']
+
+#     def args(self, obj):
+#         return obj.task.args
+
+#     def kwargs(self, obj):
+#         return obj.task.kwargs
+
+#     def run_tasks(self, request, queryset):
+#         # queryset of PeriodicTaskExt objects.
+#         tasks = []
+#         for item in queryset:
+#             task_name = str(item.task.task)
+#             args = json.loads(item.task.args)
+#             kwargs = json.loads(item.task.kwargs)
+#             kwargs["username"] = request.user.username
+#             task = send_task(task_name, args=args, kwargs=kwargs)
+#             tasks.append(task)
+#         self.message_user(
+#             request,
+#             "Taak/taken opgestart: %s" % ', '.join([str(t) for t in tasks]))
+#     run_tasks.short_description = "Uitvoeren geselecteerde task"
+
+
+def secured_periodic_task_form():
+    """
+    Based on djcelery.admin.periodic_task_form
+    """
     loaders.autodiscover()
+    tasks = list(sorted(registry.tasks.regular().keys()))
+    choices = (("", ""), ) + tuple(zip(tasks, tasks))
 
-    list_display = (
-        'id', 'task', 'args', 'kwargs', 'data_set')
-    list_filter = ('data_set',)
+    class SecuredPeriodicTaskForm(forms.ModelForm):
+        """
+        Either fill in "periodic_task", or the fields (reg)task, name, ...
 
-    actions = ['empty_action', 'run_tasks']
+        If periodic_task is filled, (reg)task, name will be filled if empty.
+        """
+        # name = forms.CharField(max_length=200, required=False)
+        regtask = LaxChoiceField(label=_(u"Task (registered)"),
+                                 choices=choices, required=False)
+        task = forms.CharField(label=_("Task (custom)"), required=False,
+                               max_length=200)
+        data_set = forms.ModelChoiceField(queryset=DataSet.objects.all(),
+                                          required=False)
 
-    def args(self, obj):
-        return obj.task.args
+        class Meta:
+            model = SecuredPeriodicTask
 
-    def kwargs(self, obj):
-        return obj.task.kwargs
+        def clean(self):
+            data = super(SecuredPeriodicTaskForm, self).clean()
 
-    # def id_no_link(self, obj):
-    #     return u'</a>%s<a>' % obj.id
-    # id_no_link.allow_tags = True
-    # id_no_link.short_description = "id"
+            regtask = data.get("regtask")
+            if regtask:
+                data["task"] = regtask
+            if not data["task"]:
+                exc = forms.ValidationError(_(u"Need name of task"))
+                self._errors["task"] = self.error_class(exc.messages)
+                raise exc
 
-    def run_tasks(self, request, queryset):
-        # queryset of PeriodicTaskExt objects.
-        tasks = []
-        for item in queryset:
-            task_name = str(item.task.task)
-            args = json.loads(item.task.args)
-            kwargs = json.loads(item.task.kwargs)
-            kwargs["username"] = request.user.username
-            task = send_task(task_name, args=args, kwargs=kwargs)
-            tasks.append(task)
-        self.message_user(
-            request,
-            "Taak/taken opgestart: %s" % ', '.join([str(t) for t in tasks]))
-    run_tasks.short_description = "Uitvoeren geselecteerde task"
+            return data
+
+    return SecuredPeriodicTaskForm
 
 
-admin.site.register(PeriodicTaskExt, PeriodicTaskExtAdmin)
+class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
+    model = SecuredPeriodicTask
+    form = secured_periodic_task_form()
+    fieldsets = (
+            # ("Parent Periodic Task", {
+            #     "fields": ("periodic_task", ),
+            #     "classes": ("extrapretty", "wide", ),
+            # }),
+            (None, {
+                "fields": ("name", "regtask", "task", "enabled", "data_set"),
+                "classes": ("extrapretty", "wide"),
+            }),
+            ("Schedule", {
+                "fields": ("interval", "crontab"),
+                "classes": ("extrapretty", "wide", ),
+            }),
+            ("Arguments", {
+                "fields": ("args", "kwargs"),
+                "classes": ("extrapretty", "wide", "collapse"),
+            }),
+            ("Execution Options", {
+                "fields": ("expires", "queue", "exchange", "routing_key"),
+                "classes": ("extrapretty", "wide", "collapse"),
+            }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(SecuredPeriodicTaskAdmin, self).__init__(*args, **kwargs)
+        self.form = secured_periodic_task_form()
+
+
+#admin.site.register(PeriodicTaskExt, PeriodicTaskExtAdmin)
+admin.site.register(SecuredPeriodicTask, SecuredPeriodicTaskAdmin)
 admin.site.register(TaskLogging, TaskLoggingAdmin)
 admin.site.register(TaskExecution, TaskExecutionAdmin)
+admin.site.unregister(PeriodicTask)  # We always want the SecuredPeriodicTask instead
