@@ -64,7 +64,7 @@ class TaskExecution(models.Model):
     tasks.
     """
     task = models.ForeignKey(SecuredPeriodicTask,
-                             null=True)
+                             null=True, blank=True)
     task_uuid = models.CharField(max_length=255, unique=True)
     started_by = models.CharField(max_length=128, null=True, blank=True)
     dt_start = models.DateTimeField()
@@ -84,13 +84,16 @@ class TaskExecution(models.Model):
     def task_state(self):
         return TaskState.objects.get(task_id=self.task_uuid)
 
+    def get_absolute_url(self):
+        return reverse('lizard_task_execution_detail', kwargs={
+                'task_execution_id': self.id})
+
 
 class TaskLogging(models.Model):
     """
     Gets filled by the DBLoggingHandler
     """
-    task = models.ForeignKey(TaskExecution,
-                             related_name="tasklogging_task")
+    task = models.ForeignKey(TaskExecution)
     time = models.DateTimeField(blank=True, null=True)
     level = models.IntegerField(
         choices=LOGGING_LEVELS,
@@ -99,8 +102,10 @@ class TaskLogging(models.Model):
     message = models.CharField(max_length=256)
     supports_object_permissions = True
     objects = FilteredManager()
-    data_set = models.ForeignKey(DataSet, null=True, blank=True,
-                                 related_name="tasklogging_data_set")
+    data_set = models.ForeignKey(DataSet, null=True, blank=True)
 
     class Meta:
         get_latest_by = "time"
+
+    def __unicode__(self):
+        return '%s: %s' % (str(self.time), self.message)

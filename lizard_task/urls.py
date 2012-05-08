@@ -8,6 +8,7 @@ from lizard_ui.urls import debugmode_urlpatterns
 
 from lizard_task.views import TasksView
 from lizard_task.views import TaskDetailView
+from lizard_task.views import TaskExecutionDetailView
 
 admin.autodiscover()
 
@@ -20,5 +21,8 @@ urlpatterns = patterns(
     url(r'^(?P<task_id>\d+)/$',
         TaskDetailView.as_view(),
         name='lizard_task_detail'),
+    url(r'^execution/(?P<task_execution_id>\d+)/$',
+        TaskExecutionDetailView.as_view(),
+        name='lizard_task_execution_detail'),
     )
 urlpatterns += debugmode_urlpatterns()

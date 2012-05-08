@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 
 from lizard_task.models import SecuredPeriodicTask
+from lizard_task.models import TaskExecution
 from lizard_map.views import AppView
 
 
@@ -60,3 +61,22 @@ class TaskDetailView(AppView):
         periodic_task.send_task(username=request.user.username)
         msg = "Taak '%s' is opgestart." % periodic_task.name
         return HttpResponseRedirect('./?msg=%s' % msg)
+
+
+class TaskExecutionDetailView(AppView):
+    """
+    Show a task execution with logs
+    """
+
+    template_name = 'lizard_task/task_execution_detail.html'
+
+    def task_execution(self):
+        return TaskExecution.objects.get(pk=self.task_execution_id)
+
+    def task(self):
+        task_execution = self.task_execution()
+        return task_execution.task
+
+    def get(self, request, *args, **kwargs):
+        self.task_execution_id = kwargs['task_execution_id']
+        return super(TaskExecutionDetailView, self).get(request, *args, **kwargs)
