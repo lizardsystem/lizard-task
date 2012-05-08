@@ -37,7 +37,7 @@
               <input type="submit" name="action"  value="start" />
             </form>
           </td>
-          <td>{{ task.task.name }}</td>
+          <td>{{ task.name }}</td>
           {% if task.latest_state %}
           <td>
             {% ifequal task.latest_state.state 'SUCCESS' %}

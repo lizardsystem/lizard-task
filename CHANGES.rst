@@ -26,6 +26,9 @@ Changed:
 
 - Added SecuredPeriodicTask model with latest_state function.
 
+- Removed djcelery.PeriodicTask from admin, because
+  SecuredPeriodicTask completely replaces it.
+
 
 0.1 (2012-03-14)
 ----------------
