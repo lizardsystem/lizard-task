@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added task execution view.
 
 
 0.3 (2012-05-08)
