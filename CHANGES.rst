@@ -5,7 +5,9 @@ Changelog of lizard-task
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added task detail view.
+
+- Added migrations for 0.2.
 
 
 0.2 (2012-05-08)
