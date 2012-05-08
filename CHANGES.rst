@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.3 (unreleased)
+0.3 (2012-05-08)
 ----------------
 
 - Added task detail view.
