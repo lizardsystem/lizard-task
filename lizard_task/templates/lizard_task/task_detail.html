@@ -1,0 +1,105 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}
+Serverproces: {{ view.task }}
+{% endblock title %}
+
+{% block branding %}
+  <h1 id="site-name">Serverproces: {{ view.task }}</h1>
+{% endblock branding %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url lizard_task_home %}">Overzicht serverprocessen</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if view.msg %}
+<h4>{{ view.msg }}</h4>
+{% endif %}
+
+<form action="" method="POST">{% csrf_token %}
+  <input type="hidden" name="task_pk" value="{{ view.task.pk }}" />
+  <input type="submit" name="action"  value="start" />
+</form>
+
+<div class="module">
+  <table width="100%">
+    <thead>
+      <tr>
+        <th>
+          UUID
+        </th>
+        <th>
+          Status
+        </th>
+        <th>
+          Opgestart door
+        </th>
+        <th>
+          Ontvangen
+        </th>
+        <th>
+          Runtime (s)
+        </th>
+        <th>
+          Uitvoerder
+        </th>
+        <th>
+          Resultaat
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for task_execution in view.task.taskexecution_set.all %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+      <td>
+        <a href="{{ task_execution.get_absolute_url }}">{{ task_execution.task_uuid }}</a>
+      </td>
+      <td>
+        {% ifequal task_execution.task_state.state 'SUCCESS' %}
+          <span style="color: green;">
+        {% else %}
+          {% ifequal task_execution.task_state.state 'FAILURE' %}
+            <span style="color: red;">
+          {% else %}
+            {% ifequal task_execution.task_state.state 'STARTED' %}
+              <span>
+            {% else %}
+              <span>
+            {% endifequal %}
+          {% endifequal %}
+        {% endifequal %}
+        <strong>{{ task_execution.task_state.state }}</strong>
+        </span>
+      </td>
+      <td>
+        {% firstof task_execution.started_by 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.tstamp 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.runtime|floatformat 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.worker 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.result 'onbekend' %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td>
+        Geen runs beschikbaar.
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}

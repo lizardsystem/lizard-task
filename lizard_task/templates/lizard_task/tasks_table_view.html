@@ -10,6 +10,9 @@
   <h1 id="site-name">Serverprocessen</h1>
 {% endblock %}
 
+{% block breadcrumbs %}
+{% endblock %}
+
 {% block content %}
 
   {% if view.msg %}
@@ -24,7 +27,7 @@
         <th></th>
         <th>Taaknaam</th>
         <th>Status</th>
-        <th>Start</th>
+        <th>Ontvangen</th>
         <th>Runtime (s)</th>
         <th>Resultaat</th>
       </thead>
@@ -37,7 +40,7 @@
               <input type="submit" name="action"  value="start" />
             </form>
           </td>
-          <td>{{ task.name }}</td>
+          <td><a href="{{ task.get_absolute_url }}">{{ task.name }}</a></td>
           {% if task.latest_state %}
           <td>
             {% ifequal task.latest_state.state 'SUCCESS' %}

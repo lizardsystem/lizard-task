@@ -4,6 +4,7 @@
 from celery.execute import send_task
 from django.utils import simplejson as json
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from lizard_security.models import DataSet
 from lizard_security.manager import FilteredManager
@@ -21,45 +22,15 @@ LOGGING_LEVELS = (
 )
 
 
-# class PeriodicTaskExt(models.Model):
-#     task = models.OneToOneField(PeriodicTask,
-#                                 related_name="periodictaskext_task")
-#     supports_object_permissions = True
-#     objects = FilteredManager()
-#     data_set = models.ForeignKey(DataSet, null=True, blank=True,
-#                                  related_name="periodictaskext_data_set")
-
-#     def latest_state(self):
-#         """
-#         Fetch current associated task state.
-
-#         In order for this function to work, the task need a taskname
-#         provided.
-#         """
-#         try:
-#             task_uuid = TaskExecution.objects.filter(
-#                 task=self).order_by('-dt_start')[0].task_uuid
-#             return TaskState.objects.get(task_id=task_uuid)
-#         except IndexError:
-#             return None
-
-#     def send_task(self, username=None):
-#         task = self.task
-#         args_params = json.loads(task.args)
-#         kwargs_params = json.loads(task.kwargs)
-#         kwargs_params["username"] = username or '-'
-#         result = send_task(task.task, args=args_params, kwargs=kwargs_params)
-
-#     def __unicode__(self):
-#         return self.task.name
-
-
 class SecuredPeriodicTask(PeriodicTask):
     """
     Adds data_set to PeriodicTask to provide security.
     """
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True)
+
+    class Meta:
+        ordering = ('name', )
 
     def latest_state(self):
         """
@@ -82,6 +53,9 @@ class SecuredPeriodicTask(PeriodicTask):
         kwargs_params = json.loads(self.kwargs)
         kwargs_params["username"] = username or '-'
         result = send_task(self.task, args=args_params, kwargs=kwargs_params)
+
+    def get_absolute_url(self):
+        return reverse('lizard_task_detail', kwargs={'task_id': self.id})
 
 
 class TaskExecution(models.Model):
@@ -106,6 +80,9 @@ class TaskExecution(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (self.task or '-', self.id)
+
+    def task_state(self):
+        return TaskState.objects.get(task_id=self.task_uuid)
 
 
 class TaskLogging(models.Model):

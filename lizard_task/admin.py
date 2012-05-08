@@ -119,10 +119,6 @@ class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
     model = SecuredPeriodicTask
     form = secured_periodic_task_form()
     fieldsets = (
-            # ("Parent Periodic Task", {
-            #     "fields": ("periodic_task", ),
-            #     "classes": ("extrapretty", "wide", ),
-            # }),
             (None, {
                 "fields": ("name", "regtask", "task", "enabled", "data_set"),
                 "classes": ("extrapretty", "wide"),
