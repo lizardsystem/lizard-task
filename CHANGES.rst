@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.2 (unreleased)
+0.2 (2012-05-08)
 ----------------
 
 Things to do after upgrading:
