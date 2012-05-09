@@ -5,7 +5,8 @@ Changelog of lizard-task
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added migration, renamed a column. You may need to clear
+  TaskExecution before migration.
 
 
 0.4 (2012-05-09)

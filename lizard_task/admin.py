@@ -25,7 +25,7 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
-    list_display = ('task_execution', 'task_uuid', 'status',
+    list_display = ('task', 'task_uuid', 'status',
                     'started_by', 'log_messages',
                     'dt_start', 'dt_finish', 'task_uuid')
 
@@ -35,7 +35,8 @@ class TaskExecutionAdmin(admin.ModelAdmin):
             return states[0].state
 
     def log_messages(self, obj):
-        logs = TaskLogging.objects.filter(task__id=obj.id).order_by('id')
+        #logs = TaskLogging.objects.filter(task_execution__id=obj.id).order_by('id')
+        logs = obj.tasklogging_set.all()
         msg = ""
         for log in logs:
             msg = "%s | %s" % (msg, log.message)
@@ -113,4 +114,8 @@ class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
 admin.site.register(SecuredPeriodicTask, SecuredPeriodicTaskAdmin)
 admin.site.register(TaskLogging, TaskLoggingAdmin)
 admin.site.register(TaskExecution, TaskExecutionAdmin)
-admin.site.unregister(PeriodicTask)  # We always want the SecuredPeriodicTask instead
+try:
+    admin.site.unregister(PeriodicTask)  # We always want the SecuredPeriodicTask instead
+except:
+    # NotRegistered Occurs sometimes on the dev server
+    pass
