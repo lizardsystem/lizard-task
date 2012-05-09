@@ -1,0 +1,123 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<meta http-equiv="refresh" content="10" >
+{% endblock %}
+
+{% block title %}
+Serverproces uitvoer
+{% endblock title %}
+
+{% block branding %}
+  <h1 id="site-name">Serverproces uitvoer</h1>
+{% endblock branding %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url lizard_task_home %}">Overzicht serverprocessen</a>
+  {% if view.task %}
+  <a href="{{ view.task.get_absolute_url }}"> &rsaquo; {{ view.task }}</a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<h3>Taak uitvoer details</h3>
+
+<div class="module">
+  <table width="100%">
+    <tr>
+      <th>
+        Taak
+      </th>
+      <td>
+        {{ view.task_execution }}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        UUID
+      </th>
+      <td>
+        {{ view.task_execution.task_uuid }}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Status
+      </th>
+      <td>
+        {% ifequal view.task_execution.task_state.state 'SUCCESS' %}
+          <span style="color: green;">
+        {% else %}
+          {% ifequal view.task_execution.task_state.state 'FAILURE' %}
+            <span style="color: red;">
+          {% else %}
+            {% ifequal view.task_execution.task_state.state 'STARTED' %}
+              <span>
+            {% else %}
+              <span>
+            {% endifequal %}
+          {% endifequal %}
+        {% endifequal %}
+        <strong>{{ view.task_execution.task_state.state }}</strong>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Opgestart door
+      </th>
+      <td>
+        {% firstof view.task_execution.started_by 'onbekend' %}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Ontvangen
+      </th>
+      <td>
+        {{ view.task_execution.task_state.tstamp }}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Runtime (s)
+      </th>
+      <td>
+        {% firstof view.task_execution.task_state.runtime|floatformat 'onbekend' %}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Uitvoerder
+      </th>
+      <td>
+        {% firstof view.task_execution.task_state.worker 'onbekend' %}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Resultaat
+      </th>
+      <td>
+        {% firstof view.task_execution.task_state.result %}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3>logging</h3>
+<ul>
+{% for logging in view.task_execution.tasklogging_set.all %}
+<li>{{ logging }}</li>
+{% empty %}
+<li>geen logging beschikbaar</li>
+{% endfor %}
+</ul>
+
+{% ifequal view.task_execution.task_state.state 'STARTED' %}
+De taak is nog bezig, er volgen mogelijk nieuwe logregels.
+{% endifequal %}
+
+{% endblock content %}

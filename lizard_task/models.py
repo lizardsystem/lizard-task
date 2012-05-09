@@ -38,8 +38,6 @@ class SecuredPeriodicTask(PeriodicTask):
 
         In order for this function to work, the task need a taskname
         provided.
-
-        TODO: fix
         """
         try:
             task_uuid = TaskExecution.objects.filter(
@@ -60,8 +58,7 @@ class SecuredPeriodicTask(PeriodicTask):
 
 class TaskExecution(models.Model):
     """
-    Jack: seems to me that this is the same as the list of Celery
-    tasks.
+    Keep track of executions of a SecuredPeriodicTask.
     """
     task = models.ForeignKey(SecuredPeriodicTask,
                              null=True, blank=True)
@@ -93,7 +90,7 @@ class TaskLogging(models.Model):
     """
     Gets filled by the DBLoggingHandler
     """
-    task = models.ForeignKey(TaskExecution)
+    task_execution = models.ForeignKey(TaskExecution)
     time = models.DateTimeField(blank=True, null=True)
     level = models.IntegerField(
         choices=LOGGING_LEVELS,
@@ -106,6 +103,7 @@ class TaskLogging(models.Model):
 
     class Meta:
         get_latest_by = "time"
+        ordering = ('time', )
 
     def __unicode__(self):
         return '%s: %s' % (str(self.time), self.message)

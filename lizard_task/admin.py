@@ -10,7 +10,6 @@ from celery import registry
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-#from lizard_task.models import PeriodicTaskExt
 from lizard_task.models import SecuredPeriodicTask
 from lizard_task.models import TaskExecution
 from lizard_task.models import TaskLogging
@@ -21,8 +20,8 @@ from django.utils import simplejson as json
 
 
 class TaskLoggingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'task', 'time', 'level', 'message', 'data_set')
-    list_filter = ('task',)
+    list_display = ('id', 'task_execution', 'time', 'level', 'message', 'data_set')
+    list_filter = ('task_execution',)
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
@@ -41,37 +40,6 @@ class TaskExecutionAdmin(admin.ModelAdmin):
         for log in logs:
             msg = "%s | %s" % (msg, log.message)
         return msg
-
-
-# class PeriodicTaskExtAdmin(admin.ModelAdmin):
-#     loaders.autodiscover()
-
-#     list_display = (
-#         'id', 'task', 'args', 'kwargs', 'data_set')
-#     list_filter = ('data_set',)
-
-#     actions = ['empty_action', 'run_tasks']
-
-#     def args(self, obj):
-#         return obj.task.args
-
-#     def kwargs(self, obj):
-#         return obj.task.kwargs
-
-#     def run_tasks(self, request, queryset):
-#         # queryset of PeriodicTaskExt objects.
-#         tasks = []
-#         for item in queryset:
-#             task_name = str(item.task.task)
-#             args = json.loads(item.task.args)
-#             kwargs = json.loads(item.task.kwargs)
-#             kwargs["username"] = request.user.username
-#             task = send_task(task_name, args=args, kwargs=kwargs)
-#             tasks.append(task)
-#         self.message_user(
-#             request,
-#             "Taak/taken opgestart: %s" % ', '.join([str(t) for t in tasks]))
-#     run_tasks.short_description = "Uitvoeren geselecteerde task"
 
 
 def secured_periodic_task_form():
@@ -142,7 +110,6 @@ class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
         self.form = secured_periodic_task_form()
 
 
-#admin.site.register(PeriodicTaskExt, PeriodicTaskExtAdmin)
 admin.site.register(SecuredPeriodicTask, SecuredPeriodicTaskAdmin)
 admin.site.register(TaskLogging, TaskLoggingAdmin)
 admin.site.register(TaskExecution, TaskExecutionAdmin)

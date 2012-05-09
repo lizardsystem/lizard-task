@@ -5,7 +5,9 @@ Changelog of lizard-task
 0.4 (unreleased)
 ----------------
 
-- Added task execution view.
+- Fixed DBLoggingHandler when no task_execution is provided.
+
+- Added task execution view with logging and details.
 
 
 0.3 (2012-05-08)

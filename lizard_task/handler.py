@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from celery.task import Task
 
 from lizard_task.models import TaskExecution
@@ -39,7 +39,7 @@ def create_task_execution(task, username, task_uuid):
             task=task,
             task_uuid=task_uuid,
             started_by=username,
-            dt_start=datetime.today(),
+            dt_start=datetime.datetime.now(),
             data_set=task.data_set if task else None)
         task_execution.save()
         return task_execution
@@ -63,8 +63,8 @@ def get_handler(taskname=None, username=None):
             logger.exception('Something went wrong fetching task')
 
     task_uuid = Task.request.id  # Current task uuid
-    task_execution = create_task_execution(task, username, task_uuid)
-    logging.handlers.DBLoggingHandler = DBLoggingHandler
-    handler = logging.handlers.DBLoggingHandler(
-        task_execution, username)
-    return handler
+    if task_uuid:
+        task_execution = create_task_execution(task, username, task_uuid)
+    else:
+        task_execution = None
+    return DBLoggingHandler(task_execution, username)

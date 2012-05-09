@@ -9,7 +9,23 @@ from lizard_task.models import TaskExecution
 from lizard_map.views import AppView
 
 
-class TasksView(AppView):
+class SendTask(object):
+    """
+    Inherit this class in your view to react on post task messages.
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        Start SecuredPeriodicTask with pk task_pk.
+        """
+        pk = request.POST['task_pk']
+        # Lizard security is at work here.
+        periodic_task = SecuredPeriodicTask.objects.get(pk=pk)
+        periodic_task.send_task(username=request.user.username)
+        msg = "Taak '%s' is in de wachtrij geplaatst." % periodic_task.name
+        return HttpResponseRedirect('./?msg=%s' % msg)
+
+
+class TasksView(SendTask, AppView):
     """
     Show a list of all available tasks
     """
@@ -25,19 +41,8 @@ class TasksView(AppView):
         self.msg = request.GET.get('msg', '')
         return super(TasksView, self).get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        """
-        Start SecuredPeriodicTask with pk task_pk.
-        """
-        pk = request.POST['task_pk']
-        # Lizard security is at work here.
-        periodic_task = SecuredPeriodicTask.objects.get(pk=pk)
-        periodic_task.send_task(username=request.user.username)
-        msg = "Taak '%s' is opgestart." % periodic_task.name
-        return HttpResponseRedirect('./?msg=%s' % msg)
 
-
-class TaskDetailView(AppView):
+class TaskDetailView(SendTask, AppView):
     """
     Show a task in detail, with history
     """
@@ -50,17 +55,6 @@ class TaskDetailView(AppView):
     def get(self, request, *args, **kwargs):
         self.task_id = kwargs['task_id']
         return super(TaskDetailView, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Start SecuredPeriodicTask with pk task_pk.
-        """
-        pk = request.POST['task_pk']
-        # Lizard security is at work here.
-        periodic_task = SecuredPeriodicTask.objects.get(pk=pk)
-        periodic_task.send_task(username=request.user.username)
-        msg = "Taak '%s' is opgestart." % periodic_task.name
-        return HttpResponseRedirect('./?msg=%s' % msg)
 
 
 class TaskExecutionDetailView(AppView):

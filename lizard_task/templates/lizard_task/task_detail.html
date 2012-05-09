@@ -1,5 +1,9 @@
 {% extends "admin/base_site.html" %}
 
+{% block extrahead %}
+<meta http-equiv="refresh" content="10" >
+{% endblock %}
+
 {% block title %}
 Serverproces: {{ view.task }}
 {% endblock title %}
