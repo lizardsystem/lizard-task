@@ -25,7 +25,7 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 
 
 class TaskExecutionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'task_uuid', 'status',
+    list_display = ('task_execution', 'task_uuid', 'status',
                     'started_by', 'log_messages',
                     'dt_start', 'dt_finish', 'task_uuid')
 
