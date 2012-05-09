@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.5 (unreleased)
+0.5 (2012-05-09)
 ----------------
 
 - Added migration, renamed a column. You may need to clear
