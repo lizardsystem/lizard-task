@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.4 (unreleased)
+0.4 (2012-05-09)
 ----------------
 
 - Fixed DBLoggingHandler when no task_execution is provided.
