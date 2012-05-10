@@ -63,24 +63,25 @@ Example usage lizard-task logging handler
 
 
   import logging
-  from celery.task import task, Task
+  from celery.task import task
   from lizard_task.handler import get_handler
 
   @task()
-  def import_dbf(levelno=20):
-      
-      task_id = Task.request.id
-      handler = get_handler(task_id, '<<task_name>>', '<<username>>')
-      logger = logging.getLogger(__name__)
+  def import_dbf(username=None, taskname=None, loglevel=20):
+
+      # Set up logging
+      handler = get_handler(username=username, taskname=taskname)
       logger.addHandler(handler)
-      logger.setLevel()
+      logger.setLevel(loglevel)
+
+      # Actual code to do the task
 
       <<your code>>
       logger.info("Logging message")
       <<your code>>
 
+      # Remove logging handler
       logger.removeHandler(handler)
 
-
-
-
+      # Task result
+      return 'OK'
