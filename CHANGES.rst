@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.6 (unreleased)
+0.6 (2012-05-10)
 ----------------
 
 - Added option 'staff_only' to SecuredPeriodicTask. Tasks can now be
