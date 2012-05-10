@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Made auto refreshing task execution page conditional on task state.
 
 
 0.5 (2012-05-09)

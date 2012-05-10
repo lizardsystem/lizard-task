@@ -1,7 +1,9 @@
 {% extends "admin/base_site.html" %}
 
 {% block extrahead %}
+{% ifequal view.task_execution.task_state.state 'STARTED' %}
 <meta http-equiv="refresh" content="10" >
+{% endifequal %}
 {% endblock %}
 
 {% block title %}
