@@ -28,6 +28,7 @@ class SecuredPeriodicTask(PeriodicTask):
     """
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True)
+    staff_only = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('name', )

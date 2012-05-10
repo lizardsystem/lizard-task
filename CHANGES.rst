@@ -5,6 +5,9 @@ Changelog of lizard-task
 0.6 (unreleased)
 ----------------
 
+- Added option 'staff_only' to SecuredPeriodicTask. Tasks can now be
+  staff only.
+
 - Made auto refreshing task execution page conditional on task state.
 
 
