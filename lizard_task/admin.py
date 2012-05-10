@@ -64,6 +64,7 @@ def secured_periodic_task_form():
                                max_length=200)
         data_set = forms.ModelChoiceField(queryset=DataSet.objects.all(),
                                           required=False)
+        staff_only = forms.BooleanField(required=False, initial=True)
 
         class Meta:
             model = SecuredPeriodicTask
@@ -89,7 +90,7 @@ class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
     form = secured_periodic_task_form()
     fieldsets = (
             (None, {
-                "fields": ("name", "regtask", "task", "enabled", "data_set"),
+                "fields": ("name", "regtask", "task", "enabled", "data_set", "staff_only"),
                 "classes": ("extrapretty", "wide"),
             }),
             ("Schedule", {

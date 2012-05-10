@@ -19,7 +19,17 @@ class SendTask(object):
         """
         pk = request.POST['task_pk']
         # Lizard security is at work here.
-        periodic_task = SecuredPeriodicTask.objects.get(pk=pk)
+        try:
+            periodic_task = SecuredPeriodicTask.objects.get(pk=pk)
+        except SecuredPeriodicTask.DoesNotExist:
+            msg = ("Taak '%s' kan niet gevonden worden of mag niet worden uitgevoerd" %
+                   periodic_task.name)
+            return HttpResponseRedirect('./?msg=%s' % msg)
+        # Staff-only?
+        if not self.request.user.is_staff and periodic_task.staff_only:
+            msg = ("Taak '%s' mag alleen door staff worden uitgevoerd." %
+                   periodic_task.name)
+            return HttpResponseRedirect('./?msg=%s' % msg)
         periodic_task.send_task(username=request.user.username)
         msg = "Taak '%s' is in de wachtrij geplaatst." % periodic_task.name
         return HttpResponseRedirect('./?msg=%s' % msg)
@@ -34,8 +44,11 @@ class TasksView(SendTask, AppView):
     msg = ""
 
     def tasks(self):
-        return SecuredPeriodicTask.objects.all()
-        #return SecuredPeriodicTask.objects.filter(data_set__isnull=False)
+        tasks = SecuredPeriodicTask.objects.all()
+        if not self.request.user.is_staff:
+            # Filter out non-staff tasks
+            tasks = tasks.filter(staff_only=False)
+        return tasks
 
     def get(self, request, *args, **kwargs):
         self.msg = request.GET.get('msg', '')
