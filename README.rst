@@ -15,8 +15,8 @@ Lizard-task extends django-celery with next functionalities:
   loggings using lizard-security
 
 
-Usage in our project
---------------------
+Setting up lizard-task
+----------------------
 To use lizard-task, we need to
 
 - Add celery, django-celery and lizard-security to INSTALLED_APPS
@@ -75,24 +75,15 @@ Example usage lizard-task logging handler
 
   import logging
   from celery.task import task
-  from lizard_task.handler import get_handler
+  from lizard_task.task import task_logging
 
-  @task()
+
+  @task
+  @task_logging
   def import_dbf(username=None, taskname=None, loglevel=20):
+      logger.getLogger(taskname)
+      # Do your thing
 
-      # Set up logging
-      handler = get_handler(username=username, taskname=taskname)
-      logger.addHandler(handler)
-      logger.setLevel(loglevel)
 
-      # Actual code to do the task
 
-      <<your code>>
-      logger.info("Logging message")
-      <<your code>>
-
-      # Remove logging handler
-      logger.removeHandler(handler)
-
-      # Task result
-      return 'OK'
+task_logging accepts kwargs username, taskname, loglevel.
