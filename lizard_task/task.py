@@ -46,27 +46,3 @@ def task_logging(the_func):
     _decorated.__name__ = the_func.__name__
 
     return _decorated
-
-
-# class task_logging(object):
-
-#     __module__ = 'my module'
-
-#     def __init__(self, func, *args, **kwargs):
-#         print 'init'
-#         logger = logging.getLogger('lizard_fewsjdbc_tasks')
-#         logger.info('iiiinit')
-#         self.func = func
-#         self.__module__ = func.__module__
-#         pass
-
-#     def __call__(self, *args, **kwargs):
-#         print 'call'
-#         return self.func(*args, **kwargs)
-
-#     def __name__(self, *args, **kwargs):
-#         return 'my name'
-
-#     # def __module__(self, *args, **kwargs):
-#     #     print 'module'
-#     #     return self.func(*args, **kwargs)

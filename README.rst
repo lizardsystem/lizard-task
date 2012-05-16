@@ -87,3 +87,7 @@ Example usage lizard-task logging handler
 
 
 task_logging accepts kwargs username, taskname, loglevel.
+
+You have to use logger.getLogger(taskname) to get the TaskExecution
+logger. This means that probably the logging in your sub-calls will
+get lost.
