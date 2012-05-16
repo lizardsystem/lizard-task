@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Improved views to work without the django admin monitor.
 
 
 0.7 (2012-05-16)

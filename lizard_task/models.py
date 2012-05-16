@@ -47,6 +47,9 @@ class SecuredPeriodicTask(PeriodicTask):
         except IndexError:
             return None
 
+    def latest_taskexecution(self):
+        return self.taskexecution_set.latest()
+
     def send_task(self, username=None):
         args_params = json.loads(self.args)
         kwargs_params = json.loads(self.kwargs)
@@ -65,7 +68,7 @@ class TaskExecution(models.Model):
                              null=True, blank=True)
     task_uuid = models.CharField(max_length=255, unique=True)
     started_by = models.CharField(max_length=128, null=True, blank=True)
-    dt_start = models.DateTimeField()
+    dt_start = models.DateTimeField(auto_now_add=True)
     dt_finish = models.DateTimeField(null=True,
                                      blank=True)
     #supports_object_permissions = True

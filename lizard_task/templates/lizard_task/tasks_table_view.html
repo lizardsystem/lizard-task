@@ -27,10 +27,10 @@
         <th></th>
         <th>Taaknaam</th>
         <th>Aantal uitvoeringen</th>
-        <th>Status</th>
-        <th>Ontvangen</th>
+        <th>Laatste uitvoering</th>
         <th>Runtime (s)</th>
         <th>Resultaat</th>
+        <th>Status</th>
       </thead>
       <tbody>
       {% for task in view.tasks %}
@@ -46,6 +46,9 @@
             {{ task.taskexecution_set.all.count }}
           </td>
           {% if task.latest_state %}
+          <td>{% firstof task.taskexecution_set.latest.dt_start '-' %}</td>
+          <td>{% firstof task.latest_state.runtime|floatformat '-' %}</td>
+          <td>{% firstof task.latest_state.result '-' %}</td>
           <td>
             {% ifequal task.latest_state.state 'SUCCESS' %}
               <span style="color: green;">
@@ -63,11 +66,9 @@
             <strong>{{ task.latest_state.state }}</strong>
             </span>
           </td>
-          <td>{% firstof task.latest_state.tstamp '-' %}</td>
-          <td>{% firstof task.latest_state.runtime|floatformat '-' %}</td>
-          <td>{% firstof task.latest_state.result '-' %}</td>
         {% else %}
-          <td colspan="4">-</td>
+          <td>{% firstof task.taskexecution_set.latest.dt_start '-' %}</td>
+          <td colspan="3">(niet beschikbaar)</td>
         {% endif %}
 
          </tr>

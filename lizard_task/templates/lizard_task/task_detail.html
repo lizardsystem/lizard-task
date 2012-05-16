@@ -37,13 +37,10 @@ Serverproces: {{ view.task }}
           UUID
         </th>
         <th>
-          Status
-        </th>
-        <th>
           Opgestart door
         </th>
         <th>
-          Ontvangen
+          Start uitvoering
         </th>
         <th>
           Runtime (s)
@@ -54,6 +51,9 @@ Serverproces: {{ view.task }}
         <th>
           Resultaat
         </th>
+        <th>
+          Status
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -61,6 +61,21 @@ Serverproces: {{ view.task }}
     <tr class="{% cycle 'row1' 'row2' %}">
       <td>
         <a href="{{ task_execution.get_absolute_url }}">{{ task_execution.task_uuid }}</a>
+      </td>
+      <td>
+        {% firstof task_execution.started_by 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.dt_start 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.runtime 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.worker 'onbekend' %}
+      </td>
+      <td>
+        {% firstof task_execution.task_state.result 'onbekend' %}
       </td>
       <td>
         {% ifequal task_execution.task_state.state 'SUCCESS' %}
@@ -78,21 +93,6 @@ Serverproces: {{ view.task }}
         {% endifequal %}
         <strong>{{ task_execution.task_state.state }}</strong>
         </span>
-      </td>
-      <td>
-        {% firstof task_execution.started_by 'onbekend' %}
-      </td>
-      <td>
-        {% firstof task_execution.task_state.tstamp 'onbekend' %}
-      </td>
-      <td>
-        {% firstof task_execution.task_state.runtime|floatformat 'onbekend' %}
-      </td>
-      <td>
-        {% firstof task_execution.task_state.worker 'onbekend' %}
-      </td>
-      <td>
-        {% firstof task_execution.task_state.result 'onbekend' %}
       </td>
     </tr>
     {% empty %}
