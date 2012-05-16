@@ -96,7 +96,7 @@ get lost.
 Executing tasks
 ---------------
 
-In admin, define a secured periodic task. As argument, provide
+In admin, define a secured periodic task. As keyword arguments, provide
 {"taskname": <fill in your name>}. Optionally, set your data_set and
 staff_only.
 
