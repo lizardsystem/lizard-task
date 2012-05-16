@@ -78,6 +78,7 @@ class TaskExecution(models.Model):
 
     class Meta:
         get_latest_by = "dt_start"
+        ordering = ("-dt_start", )
 
     def __unicode__(self):
         return "%s %s" % (self.task or '-', self.id)
@@ -88,6 +89,12 @@ class TaskExecution(models.Model):
     def get_absolute_url(self):
         return reverse('lizard_task_execution_detail', kwargs={
                 'task_execution_id': self.id})
+
+    def delta_time(self):
+        if self.dt_start and self.dt_finish:
+            return self.dt_finish - self.dt_start
+        else:
+            return None
 
 
 class TaskLogging(models.Model):

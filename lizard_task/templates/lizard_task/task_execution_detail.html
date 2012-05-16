@@ -84,6 +84,22 @@ Serverproces uitvoer
     </tr>
     <tr>
       <th>
+        Gestopt
+      </th>
+      <td>
+        {{ view.task_execution.dt_finish }}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Runtime
+      </th>
+      <td>
+        {% firstof view.task_execution.delta_time '-' %}
+      </td>
+    </tr>
+    <tr>
+      <th>
         Ontvangen
       </th>
       <td>

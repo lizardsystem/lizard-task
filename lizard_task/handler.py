@@ -65,6 +65,8 @@ def get_handler(taskname=None, username=None):
     task_uuid = Task.request.id  # Current task uuid
     if task_uuid:
         task_execution = create_task_execution(task, username, task_uuid)
+        print 'created task_execution %s' % task_execution
     else:
         task_execution = None
+        print 'no task_execution'
     return DBLoggingHandler(task_execution, username)
