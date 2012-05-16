@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.7 (unreleased)
+0.7 (2012-05-16)
 ----------------
 
 - Added column "aantal uitvoeringen". It seems that when using a
