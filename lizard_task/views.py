@@ -66,6 +66,7 @@ class TaskDetailView(SendTask, AppView):
         return SecuredPeriodicTask.objects.get(pk=self.task_id)
 
     def get(self, request, *args, **kwargs):
+        self.msg = request.GET.get('msg', '')
         self.task_id = kwargs['task_id']
         return super(TaskDetailView, self).get(request, *args, **kwargs)
 

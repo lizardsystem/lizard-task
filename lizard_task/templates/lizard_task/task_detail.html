@@ -1,7 +1,11 @@
 {% extends "admin/base_site.html" %}
 
 {% block extrahead %}
-<meta http-equiv="refresh" content="10" >
+  {% if view.msg %}
+    <meta http-equiv="refresh" content="5; url=./" >
+  {% else %}
+    <meta http-equiv="refresh" content="10" >
+  {% endif %}
 {% endblock %}
 
 {% block title %}

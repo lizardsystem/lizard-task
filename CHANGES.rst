@@ -5,7 +5,9 @@ Changelog of lizard-task
 0.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed msg in task detail view.
+
+- Improved refreshing pages.
 
 
 0.8 (2012-05-16)
