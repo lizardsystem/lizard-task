@@ -10,6 +10,8 @@ Changelog of lizard-task
 
 - Added field result to TaskExecution, with migration.
 
+- Improved views.
+
 
 0.9 (2012-05-16)
 ----------------

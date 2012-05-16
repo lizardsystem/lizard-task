@@ -24,12 +24,12 @@ def task_logging(the_func):
         try:
             with transaction.commit_on_success():
                 the_func(*args, **kwargs)
-            result = 'OK'
+            result = 'ok'
         except:
             logger.error('Exception')
             for exception_line in traceback.format_exc().split('\n'):
                 logger.error(exception_line)
-            result = 'Failure'
+            result = 'failure'
 
         # Remove logging handler. Note that the handler is not removed if the_func crashes.
         if handler.task_execution:

@@ -75,13 +75,25 @@ Serverproces: {{ view.task }}
         {% firstof task_execution.dt_start 'onbekend' %}
       </td>
       <td>
-        {% firstof task_execution.task_state.runtime 'onbekend' %}
+        {% firstof task_execution.delta_time '-' %}
       </td>
       <td>
         {% firstof task_execution.task_state.worker 'onbekend' %}
       </td>
       <td>
-        {% firstof task_execution.task_state.result 'onbekend' %}
+        {% ifequal task_execution.result 'ok' %}
+          <span style="color: green;">
+        {% else %}
+          {% ifequal task_execution.result 'failure' %}
+            <span style="color: red;">
+          {% else %}
+            <span>
+          {% endifequal %}
+        {% endifequal %}
+          <strong>
+            {% firstof task_execution.task_state.result task_execution.result '-' %}
+          </strong>
+        </span>
       </td>
       <td>
         {% ifequal task_execution.task_state.state 'SUCCESS' %}

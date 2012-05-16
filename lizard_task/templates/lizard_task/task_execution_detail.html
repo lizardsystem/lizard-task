@@ -38,6 +38,26 @@ Serverproces uitvoer
     </tr>
     <tr>
       <th>
+        Resultaat
+      </th>
+      <td>
+        {% ifequal view.task_execution.result 'ok' %}
+          <span style="color: green;">
+        {% else %}
+          {% ifequal view.task_execution.result 'failure' %}
+            <span style="color: red;">
+          {% else %}
+            <span>
+          {% endifequal %}
+        {% endifequal %}
+          <strong>
+            {% firstof view.task_execution.task_state.result view.task_execution.result '-' %}
+          </strong>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <th>
         UUID
       </th>
       <td>
@@ -84,14 +104,6 @@ Serverproces uitvoer
     </tr>
     <tr>
       <th>
-        Gestopt
-      </th>
-      <td>
-        {{ view.task_execution.dt_finish }}
-      </td>
-    </tr>
-    <tr>
-      <th>
         Runtime
       </th>
       <td>
@@ -108,26 +120,10 @@ Serverproces uitvoer
     </tr>
     <tr>
       <th>
-        Runtime (s)
-      </th>
-      <td>
-        {% firstof view.task_execution.task_state.runtime|floatformat 'onbekend' %}
-      </td>
-    </tr>
-    <tr>
-      <th>
         Uitvoerder
       </th>
       <td>
         {% firstof view.task_execution.task_state.worker 'onbekend' %}
-      </td>
-    </tr>
-    <tr>
-      <th>
-        Resultaat
-      </th>
-      <td>
-        {% firstof view.task_execution.task_state.result %}
       </td>
     </tr>
   </table>
