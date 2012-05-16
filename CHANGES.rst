@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.8 (unreleased)
+0.8 (2012-05-16)
 ----------------
 
 - Improved views to work without the django admin monitor.
