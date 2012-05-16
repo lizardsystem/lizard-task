@@ -91,3 +91,15 @@ task_logging accepts kwargs username, taskname, loglevel.
 You have to use logger.getLogger(taskname) to get the TaskExecution
 logger. This means that probably the logging in your sub-calls will
 get lost.
+
+
+Executing tasks
+---------------
+
+In admin, define a secured periodic task. As argument, provide
+{"taskname": <fill in your name>}. Optionally, set your data_set and
+staff_only.
+
+Now you can view the list of available tasks in the frontend::
+
+http://localhost:8000/task/
