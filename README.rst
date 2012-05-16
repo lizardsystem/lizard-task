@@ -35,6 +35,9 @@ e.g. Django database, easiest but limited (though mostly sufficient)
 
   BROKER_URL = "django://"
 
+In your INSTALLED_APPS, add 'kombu.transport.django',
+
+
 e.g. RabbitMQ:
 
   BROKER_HOST = "localhost"
