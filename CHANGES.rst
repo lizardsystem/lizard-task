@@ -5,7 +5,10 @@ Changelog of lizard-task
 0.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added column "aantal uitvoeringen". It seems that when using a
+  database broker, the django admin monitor does not work.
+
+- Removed duplicate column task_uuid in admin.
 
 
 0.6 (2012-05-10)

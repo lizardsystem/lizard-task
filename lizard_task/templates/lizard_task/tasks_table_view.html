@@ -26,6 +26,7 @@
       <thead>
         <th></th>
         <th>Taaknaam</th>
+        <th>Aantal uitvoeringen</th>
         <th>Status</th>
         <th>Ontvangen</th>
         <th>Runtime (s)</th>
@@ -41,6 +42,9 @@
             </form>
           </td>
           <td><a href="{{ task.get_absolute_url }}">{{ task.name }}</a></td>
+          <td>
+            {{ task.taskexecution_set.all.count }}
+          </td>
           {% if task.latest_state %}
           <td>
             {% ifequal task.latest_state.state 'SUCCESS' %}

@@ -27,7 +27,7 @@ class TaskLoggingAdmin(admin.ModelAdmin):
 class TaskExecutionAdmin(admin.ModelAdmin):
     list_display = ('task', 'task_uuid', 'status',
                     'started_by', 'log_messages',
-                    'dt_start', 'dt_finish', 'task_uuid')
+                    'dt_start', 'dt_finish')
 
     def status(self, obj):
         states = TaskState.objects.filter(task_id=obj.task_uuid)
