@@ -26,6 +26,8 @@ Serverproces: {{ view.task }}
 
 {% if view.msg %}
 <h4>{{ view.msg }}</h4>
+{% else %}
+<h4>Klik op 'Start' om de taak op te staren.</h4>
 {% endif %}
 
 <form action="" method="POST">{% csrf_token %}
