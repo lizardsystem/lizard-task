@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.9 (unreleased)
+0.9 (2012-05-16)
 ----------------
 
 - Fixed msg in task detail view.
