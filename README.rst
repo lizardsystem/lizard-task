@@ -35,9 +35,9 @@ Option 1: Django database, easiest but limited (though mostly
 sufficient). The biggest drawback is that you can't see the status,
 because the Django Admin monitor doesn't work.
 
-  BROKER_URL = "django://"
-
 In your INSTALLED_APPS, add 'kombu.transport.django',
+
+  BROKER_URL = "django://"
 
 
 Option 2: RabbitMQ, flexible but more cumbersome:
