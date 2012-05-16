@@ -31,6 +31,12 @@ To use lizard-task, we need to
 - Configure celery to use message broker, by additing
   the following to your settings.py::
 
+e.g. Django database, easiest but limited (though mostly sufficient)
+
+  BROKER_URL = "django://"
+
+e.g. RabbitMQ:
+
   BROKER_HOST = "localhost"
   BROKER_PORT = 5672
   BROKER_USER = "myuser"
