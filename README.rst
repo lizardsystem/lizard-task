@@ -31,14 +31,16 @@ To use lizard-task, we need to
 - Configure celery to use message broker, by additing
   the following to your settings.py::
 
-e.g. Django database, easiest but limited (though mostly sufficient)
+Option 1: Django database, easiest but limited (though mostly
+sufficient). The biggest drawback is that you can't see the status,
+because the Django Admin monitor doesn't work.
 
   BROKER_URL = "django://"
 
 In your INSTALLED_APPS, add 'kombu.transport.django',
 
 
-e.g. RabbitMQ:
+Option 2: RabbitMQ, flexible but more cumbersome:
 
   BROKER_HOST = "localhost"
   BROKER_PORT = 5672
