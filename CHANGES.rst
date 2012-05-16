@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.10 (unreleased)
+0.10 (2012-05-16)
 -----------------
 
 - Added task_logging decorator eliminating custom logging code from
