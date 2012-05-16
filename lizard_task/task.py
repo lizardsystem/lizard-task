@@ -33,6 +33,7 @@ def task_logging(the_func):
 
         # Remove logging handler. Note that the handler is not removed if the_func crashes.
         if handler.task_execution:
+            handler.task_execution.result = result
             handler.task_execution.dt_finish = datetime.datetime.now()
             handler.task_execution.save()
 

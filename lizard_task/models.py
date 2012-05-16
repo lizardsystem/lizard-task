@@ -71,6 +71,7 @@ class TaskExecution(models.Model):
     dt_start = models.DateTimeField(auto_now_add=True)
     dt_finish = models.DateTimeField(null=True,
                                      blank=True)
+    result = models.CharField(max_length=80, null=True, blank=True)
     #supports_object_permissions = True
     objects = FilteredManager()
     data_set = models.ForeignKey(DataSet, null=True, blank=True,

@@ -8,6 +8,8 @@ Changelog of lizard-task
 - Added task_logging decorator eliminating custom logging code from
   task definition.
 
+- Added field result to TaskExecution, with migration.
+
 
 0.9 (2012-05-16)
 ----------------
