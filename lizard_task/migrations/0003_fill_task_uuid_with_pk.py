@@ -8,9 +8,13 @@ from lizard_task.models import TaskExecution
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        for t in TaskExecution.objects.all():
-             t.task_uuid = t.id
-             t.save()
+        # The code below fails. The current TaskExecution model misses fields
+        # that aren't yet created at the time of migration step 0003!
+        # Commenting out the code for now.
+        # See https://github.com/lizardsystem/lizard-task/issues/1
+        # for t in TaskExecution.objects.all():
+        #      t.task_uuid = t.id
+        #      t.save()
         pass
 
 
