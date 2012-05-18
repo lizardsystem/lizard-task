@@ -5,7 +5,8 @@ Changelog of lizard-task
 0.11 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added fix for https://github.com/lizardsystem/lizard-task/issues/1 to get
+  the migrations working again.
 
 
 0.10 (2012-05-16)
