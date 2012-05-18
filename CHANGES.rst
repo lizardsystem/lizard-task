@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.11 (unreleased)
+0.11 (2012-05-18)
 -----------------
 
 - Added fix for https://github.com/lizardsystem/lizard-task/issues/1 to get
