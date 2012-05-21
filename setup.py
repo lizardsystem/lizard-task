@@ -14,6 +14,7 @@ install_requires = [
     'django-extensions',
     'django-celery',
     'django-nose',
+    'lizard-map',
     'lizard-ui >= 3.0',
     'lizard-security',
     'pkginfo',

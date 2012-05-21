@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.12 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fix tests by adding lizard-map and changing order of installed_apps.
 
 
 0.11 (2012-05-18)
