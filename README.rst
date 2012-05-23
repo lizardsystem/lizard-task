@@ -81,7 +81,7 @@ Example usage lizard-task logging handler
   @task
   @task_logging
   def import_dbf(username=None, taskname=None, loglevel=20):
-      logger.getLogger(taskname)
+      logger = logging.getLogger(taskname)
       # Do your thing
 
 
