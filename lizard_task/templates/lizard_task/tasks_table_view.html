@@ -31,8 +31,10 @@
         <th></th>
         <th>Taaknaam</th>
         <th>Aantal uitvoeringen</th>
+	<th>Laatst opgestart door</th>
         <th>Laatste uitvoering</th>
         <th>Runtime (s)</th>
+	<th>Crontab</th>
         <th>Laatste resultaat</th>
         <th>Status</th>
       </thead>
@@ -42,15 +44,23 @@
           <td>
             <form action="" method="POST">{% csrf_token %}
               <input type="hidden" name="task_pk" value="{{ task.pk }}" />
-              <input type="submit" name="action"  value="start" />
+	      {% if view.is_functioneelbeheerder %}
+                <input type="submit" name="action"  value="start" />
+	      {% else %}
+		<input disabled type="submit" name="action" title="Voor functioneelbeheerder" value="start" />
+              {% endif %}
             </form>
           </td>
           <td><a href="{{ task.get_absolute_url }}">{{ task.name }}</a></td>
           <td>
             {{ task.taskexecution_set.all.count }}
           </td>
+	  <td>
+            {% firstof task.taskexecution_set.latest.started_by 'onbekend' %}
+          </td>
           <td>{% firstof task.taskexecution_set.latest.dt_start '-' %}</td>
           <td>{% firstof task.taskexecution_set.latest.delta_time '-' %}</td>
+	  <td><strong>{{ task.crontab }}</strong></td>
           <td>
               {% ifequal task.taskexecution_set.latest.result 'ok' %}
                 <span style="color: green;">

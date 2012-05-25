@@ -7,6 +7,10 @@ Changelog of lizard-task
 
 - Fix tests by adding lizard-map and changing order of installed_apps.
 
+- Added 'started_by' and 'crontab' fields to taskoverview template.
+
+- Added permission check around 'start' button in task templates.
+
 
 0.11 (2012-05-18)
 -----------------
