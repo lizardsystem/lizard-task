@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.13 (unreleased)
+0.13 (2012-05-29)
 -----------------
 
 - Added functionality to run tasks as superuser.
