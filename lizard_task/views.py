@@ -10,15 +10,15 @@ from lizard_map.views import AppView
 
 
 def member_functioneelbeheerder_group(user):
-        """Return true is the user is a member of
-        functioneelbeheerder usergroup.
-        @TODO place this function central,
-        it is a copy from lizard_portal.view"""
-        functioneelbeheerder_groups = user.user_group_memberships.filter(
-            name__contains='functioneel beheerder')
-        if functioneelbeheerder_groups.exists():
-            return True
-        return False
+    """Return true is the user is a member of
+    functioneelbeheerder usergroup.
+    @TODO place this function central,
+    it is a copy from lizard_portal.view"""
+    functioneelbeheerder_groups = user.user_group_memberships.filter(
+	name__contains='functioneel beheerder')
+    if functioneelbeheerder_groups.exists():
+	return True
+    return False
 
 
 class SendTask(object):
@@ -43,13 +43,22 @@ class SendTask(object):
             msg = ("Taak '%s' mag alleen door staff worden uitgevoerd." %
                    periodic_task.name)
             return HttpResponseRedirect('./?msg=%s' % msg)
-        if not member_functioneelbeheerder_group(user):
+
+        if not (member_functioneelbeheerder_group(user) or user.is_superuser):
             msg = ("Taak '%s' mag alleen door functioneelbeheerder worden uitgevoerd." %
                    periodic_task.name)
             return HttpResponseRedirect('./?msg=%s' % msg)
+	
         periodic_task.send_task(username=request.user.username)
         msg = "Taak '%s' is in de wachtrij geplaatst." % periodic_task.name
         return HttpResponseRedirect('./?msg=%s' % msg)
+
+    def is_functioneelbeheerder(self):
+        user = self.request.user
+        return member_functioneelbeheerder_group(user)
+
+    def is_superuser(self):
+        return self.request.user.is_superuser
 
 
 class TasksView(SendTask, AppView):
@@ -67,10 +76,6 @@ class TasksView(SendTask, AppView):
             tasks = tasks.filter(staff_only=False)
         return tasks
 
-    def is_functioneelbeheerder(self):
-        user = self.request.user
-        return member_functioneelbeheerder_group(user)
-
     def get(self, request, *args, **kwargs):
         self.msg = request.GET.get('msg', '')
         return super(TasksView, self).get(request, *args, **kwargs)
@@ -85,10 +90,6 @@ class TaskDetailView(SendTask, AppView):
 
     def task(self):
         return SecuredPeriodicTask.objects.get(pk=self.task_id)
-
-    def is_functioneelbeheerder(self):
-        user = self.request.user
-        return member_functioneelbeheerder_group(user)
 
     def get(self, request, *args, **kwargs):
         self.msg = request.GET.get('msg', '')

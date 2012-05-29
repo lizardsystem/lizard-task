@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.13 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Added functionality to run tasks as superuser.
 
 
 0.12 (2012-05-25)
@@ -15,7 +15,7 @@ Changelog of lizard-task
 
 - Added 'started_by' and 'crontab' fields to taskoverview template.
 
-- Added permission check around 'start' button in task templates.
+- Added permission check around 'start' button in task's templates.
 
 
 0.11 (2012-05-18)

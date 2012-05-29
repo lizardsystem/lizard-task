@@ -32,7 +32,7 @@ Serverproces: {{ view.task }}
 
 <form action="" method="POST">{% csrf_token %}
   <input type="hidden" name="task_pk" value="{{ view.task.pk }}" />
-  {% if view.is_functioneelbeheerder %}
+  {% if view.is_functioneelbeheerder or view.is_superuser %}
     <input type="submit" name="action"  value="start"/>
   {% else %}
     <input disabled type="submit" name="action" title="Voor functioneelbeheerder" value="start" />
