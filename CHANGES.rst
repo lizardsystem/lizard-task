@@ -5,7 +5,7 @@ Changelog of lizard-task
 0.14 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Edited admin to configure tasks.
 
 
 0.13 (2012-05-29)

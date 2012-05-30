@@ -107,6 +107,10 @@ class SecuredPeriodicTaskAdmin(PeriodicTaskAdmin):
             }),
     )
 
+    list_filter = ('data_set', )
+    list_display = ('__unicode__', 'enabled', 'staff_only', 'data_set', )
+    list_editable = ('enabled', 'staff_only', )
+
     def __init__(self, *args, **kwargs):
         super(SecuredPeriodicTaskAdmin, self).__init__(*args, **kwargs)
         self.form = secured_periodic_task_form()
