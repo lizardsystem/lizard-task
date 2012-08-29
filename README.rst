@@ -19,7 +19,13 @@ Setting up lizard-task
 ----------------------
 To use lizard-task, we need to
 
-- Add celery, django-celery and lizard-security to INSTALLED_APPS
+- Add celery, django-celery, lizard-task and lizard-security to INSTALLED_APPS::
+
+  'celery',
+  'djcelery',
+  'lizard_security',
+  'lizard_task',
+
 - Create celery database tables::
 
   $ bin/django syncdb
@@ -28,6 +34,10 @@ To use lizard-task, we need to
 
   $ bin/django migrate
 
+- Add lizard_task to your urls.py:
+
+  url(r'^task/', include('lizard_task.urls')),
+
 - Configure celery to use message broker, by additing
   the following to your settings.py::
 
@@ -35,8 +45,10 @@ Option 1: Django database, easiest but limited (though mostly
 sufficient). The biggest drawback is that you can't see the status,
 because the Django Admin monitor doesn't work.
 
-In your INSTALLED_APPS, add 'kombu.transport.django',
+In your INSTALLED_APPS, add 'kombu.transport.django' (run bin/django
+migrate again),
 
+  # For lizard-task
   BROKER_URL = "django://"
 
 
@@ -56,7 +68,7 @@ Option 2: RabbitMQ, flexible but more cumbersome:
                     'lizard_area.tasks',
                     'lizard_esf.tasks',)
 
-- Created tasks in djcelery admin interface
+- Create tasks in djcelery admin interface
 
 - Create tasks in lizard-task admin interface
 
