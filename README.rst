@@ -115,3 +115,11 @@ staff_only.
 Now you can view the list of available tasks in the frontend::
 
 http://localhost:8000/task/
+
+
+Dump the data
+-------------
+
+To transfer the tasks to another machine, run::
+
+    $ bin/django dumpdata lizard_task.securedperiodictask djcelery.periodictask djcelery.crontabschedule djcelery.intervalschedule --indent=2 --natural
