@@ -13,6 +13,9 @@ Changelog of lizard-task
 
 - Edited admin to configure tasks.
 
+- You can now return a string from a task. By default tasks will
+  return 'ok' when they do not crash.
+
 
 0.13 (2012-05-29)
 -----------------
