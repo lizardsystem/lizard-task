@@ -23,8 +23,9 @@ def task_logging(the_func):
 
         try:
             with transaction.commit_on_success():
-                the_func(*args, **kwargs)
-            result = 'ok'
+                result = the_func(*args, **kwargs)
+            if result is None:  # you can provide your own result
+                result = 'ok'
         except:
             logger.error('Exception')
             for exception_line in traceback.format_exc().split('\n'):
