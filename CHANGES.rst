@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.15 (unreleased)
+0.15 (2012-09-17)
 -----------------
 
 - Bugfix TaskLogging max length.
