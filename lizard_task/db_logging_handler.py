@@ -31,7 +31,7 @@ class DBLoggingHandler(logging.Handler):
                 task_execution=self.task_execution,
                 time=datetime.datetime.now(),
                 level=record.levelno,
-                message=record.msg,
+                message=record.msg[:256],
                 data_set=self.task_execution.data_set)
             task_logging.save()
         except Exception as ex:
