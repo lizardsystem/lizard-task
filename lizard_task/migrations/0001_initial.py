@@ -6,8 +6,12 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("djcelery", "0002_v25_changes"),
+        )
+
     def forwards(self, orm):
-        
+
         # Adding model 'PeriodicTaskExt'
         db.create_table('lizard_task_periodictaskext', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -48,7 +52,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'PeriodicTaskExt'
         db.delete_table('lizard_task_periodictaskext')
 
