@@ -81,6 +81,7 @@ STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'static')
 MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'media')
 STATICFILES_FINDERS = STATICFILES_FINDERS
 
+SECRET_KEY = "These are unit test settings so we don't need real secrecy"""
 
 try:
     # Import local settings that aren't stored in svn/git.
