@@ -2,7 +2,7 @@ Changelog of lizard-task
 ===================================================
 
 
-0.16 (unreleased)
+0.16 (2014-08-05)
 -----------------
 
 - Made lizard-task compatible with Django 1.6.5. Dropped support for
