@@ -1,8 +1,9 @@
 # (c) Nelen & Schuurmans.  GPL licensed, see LICENSE.txt.
 # from django.db import models
 
+import json
+
 from celery.execute import send_task
-from django.utils import simplejson as json
 from django.db import models
 from django.core.urlresolvers import reverse
 

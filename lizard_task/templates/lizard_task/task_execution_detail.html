@@ -16,7 +16,7 @@ Serverproces uitvoer
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
-  <a href="{% url lizard_task_home %}">Overzicht serverprocessen</a>
+  <a href="{% url "lizard_task_home" %}">Overzicht serverprocessen</a>
   {% if view.task %}
   <a href="{{ view.task.get_absolute_url }}"> &rsaquo; {{ view.task }}</a>
   {% endif %}

@@ -16,8 +16,6 @@ from lizard_task.models import TaskLogging
 
 from lizard_security.models import DataSet
 
-from django.utils import simplejson as json
-
 
 class TaskLoggingAdmin(admin.ModelAdmin):
     list_display = ('id', 'task_execution', 'time', 'level', 'message', 'data_set')

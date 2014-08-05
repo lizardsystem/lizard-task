@@ -10,13 +10,13 @@ long_description = '\n\n'.join([
     ])
 
 install_requires = [
-    'Django',
+    'Django >= 1.4, < 1.7',
     'django-extensions',
     'django-celery',
     'django-nose',
-    'lizard-map',
-    'lizard-ui >= 3.0',
-    'lizard-security',
+    'lizard-map >= 4.40',      # For Django 1.6.5 support
+    'lizard-ui >= 4.40',       # For Django 1.6.5 support
+    'lizard-security >= 0.7',  # For Django 1.6.5 support
     'pkginfo',
     'djangorestframework',
     ],
@@ -42,7 +42,7 @@ setup(name='lizard-task',
       zip_safe=False,
       install_requires=install_requires,
       tests_require=tests_require,
-      extras_require = {'test': tests_require},
+      extras_require={'test': tests_require},
       entry_points={
           'console_scripts': [
           ]},
